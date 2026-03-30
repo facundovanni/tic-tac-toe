@@ -7,8 +7,9 @@ class TicTacToeGame {
   #size;
   #players;
   #currentPlayerIndex;
+  #ui;
   #app;
-  
+
   constructor(size = 3) {
     this.#size = size;
     this.#players = [];
@@ -36,10 +37,23 @@ class TicTacToeGame {
   }
 
   #renderGameBoard() {
-        this.#app.innerHTML = `<h1 class="text-white">Tablero de ${this.#size}x${this.#size} listo</h1>`;
+    this.#ui = new GameUI(this.#app);
 
-    
+    this.#ui.render(this.#size, this.#players, (row, col, element) => {
+      this.#handleMove(row, col, element);
+    });
   }
+
+ #handleMove(row, col, element) {
+  const playerWhoMoved = this.#players[this.#currentPlayerIndex];
+
+  this.#ui.updateCell(element, playerWhoMoved.symbol);
+
+  this.#currentPlayerIndex = this.#currentPlayerIndex === 0 ? 1 : 0;
+  
+  const nextPlayer = this.#players[this.#currentPlayerIndex];
+  this.#ui.updateTurn(nextPlayer);
+}
 }
 
 new TicTacToeGame(3);
