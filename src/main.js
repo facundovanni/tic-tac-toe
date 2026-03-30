@@ -1,4 +1,4 @@
-import "./styles.css";
+
 import { Player } from "./models/Player.js";
 import { SetupMenu } from "./view/SetupMenu.js";
 import { GameUI } from "./view/GameUI.js";
