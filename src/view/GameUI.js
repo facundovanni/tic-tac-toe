@@ -2,7 +2,7 @@ export class GameUI {
   #container;
   #boardElement;
   #turnIndicator;
-  
+
   constructor(container) {
     this.#container = container;
   }
@@ -36,7 +36,6 @@ export class GameUI {
     this.#boardElement.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
     this.#boardElement.style.gridTemplateRows = `repeat(${size}, 1fr)`;
 
-    this.#container.appendChild(header);
     this.#container.appendChild(this.#boardElement);
 
     this.#generateCells(size, onCellClick);
@@ -44,7 +43,7 @@ export class GameUI {
 
   updateTurn(player) {
     if (!this.#turnIndicator) return;
-    
+
     const colorClass = player.symbol === "X" ? "text-cyan-400" : "text-pink-500";
     this.#turnIndicator.innerHTML = `
       Esperando jugada de <span class="${colorClass} font-black">${player.name}</span>...
@@ -78,9 +77,38 @@ export class GameUI {
     cell.disabled = true;
     cell.classList.remove("hover:bg-slate-700", "active:translate-y-1");
     cell.classList.add("cursor-default", "bg-slate-900");
-    
+
     const colorClass = symbol === "X" ? "text-cyan-400" : "text-pink-500";
     cell.classList.add(colorClass);
     cell.setAttribute('aria-label', `Ocupado por ${symbol}`);
+  }
+
+
+  showResult(isWin, message, onRestart) {
+    const overlay = document.createElement("div");
+    overlay.className = "fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-300";
+
+    const modal = document.createElement("div");
+    modal.className = "bg-slate-800 border border-slate-700 p-8 rounded-3xl shadow-2xl max-w-sm w-full text-center scale-90 animate-in zoom-in-95 duration-300";
+
+    modal.innerHTML = `
+    <div class="text-6xl mb-4">${isWin ? '🏆' : '🤝'}</div>
+    <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-tight">
+      ${isWin ? '¡Victoria!' : '¡Empate!'}
+    </h2>
+    <p class="text-slate-400 mb-8 text-lg font-medium">${message}</p>
+    <button id="modal-reset-btn" 
+      class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg active:scale-95 uppercase tracking-widest">
+      Nueva Partida
+    </button>
+  `;
+
+    overlay.appendChild(modal);
+    this.#container.appendChild(overlay);
+
+    document.getElementById("modal-reset-btn").onclick = () => {
+      overlay.remove();
+      onRestart();
+    };
   }
 }

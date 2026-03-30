@@ -26,14 +26,14 @@ export class SetupMenu {
           <input type="text" id="p2-name" name="p2-name" placeholder="Nombre Jugador 2" required
             class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 mb-3 text-white">
           
-          <div class="flex gap-6 justify-center bg-slate-900/50 py-3 rounded-lg">
+          <!--<div class="flex gap-6 justify-center bg-slate-900/50 py-3 rounded-lg">
             <label class="flex items-center cursor-pointer hover:text-cyan-400 transition-colors">
               <input type="radio" name="p2-type" value="human" class="mr-2 accent-cyan-500"> Humano
             </label>
             <label class="flex items-center cursor-pointer hover:text-pink-400 transition-colors">
               <input type="radio" name="p2-type" value="bot" checked class="mr-2 accent-pink-500"> Máquina (Bot)
             </label>
-          </div>
+          </div>-->
         </div>
 
         <button type="submit" id="start-btn" 
@@ -55,7 +55,8 @@ export class SetupMenu {
         },
         player2: {
           name: document.getElementById("p2-name").value.trim(),
-          isHuman: document.querySelector('input[name="p2-type"]:checked').value === "human"
+          isHuman: true
+          // isHuman: document.querySelector('input[name="p2-type"]:checked').value === "human"
         }
       };
       this.onStart(config);
