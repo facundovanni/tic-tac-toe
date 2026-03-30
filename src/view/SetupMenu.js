@@ -6,9 +6,8 @@ export class SetupMenu {
 
   render() {
     this.container.innerHTML = "";
-    this.container.className = "min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-8";
-
-    const card = document.createElement("div");
+    const card = document.createElement("form");
+    card.id = "setup-form";
     card.className = "bg-slate-800 p-8 rounded-2xl shadow-2xl border border-slate-700 w-full max-w-md";
 
     card.innerHTML = `
@@ -18,13 +17,13 @@ export class SetupMenu {
       <div class="space-y-6">
         <div>
           <label class="block text-sm font-medium mb-2 text-slate-500 italic">Jugador 1 (X)</label>
-          <input type="text" id="p1-name" value="Jugador 1" 
+          <input type="text" id="p1-name" name="p1-name" placeholder="Nombre Jugador 1" required
             class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white">
         </div>
         
         <div class="border-t border-slate-700 pt-4">
           <label class="block text-sm font-medium mb-2 text-slate-500 italic">Jugador 2 (O)</label>
-          <input type="text" id="p2-name" value="Bot-01" 
+          <input type="text" id="p2-name" name="p2-name" placeholder="Nombre Jugador 2" required
             class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 mb-3 text-white">
           
           <div class="flex gap-6 justify-center bg-slate-900/50 py-3 rounded-lg">
@@ -37,7 +36,7 @@ export class SetupMenu {
           </div>
         </div>
 
-        <button id="start-btn" 
+        <button type="submit" id="start-btn" 
           class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg uppercase tracking-widest mt-4 active:scale-95">
           ¡Empezar Juego!
         </button>
@@ -46,14 +45,16 @@ export class SetupMenu {
 
     this.container.appendChild(card);
 
-    document.getElementById("start-btn").addEventListener("click", () => {
+    card.addEventListener("submit", (e) => {
+      e.preventDefault();
+
       const config = {
         player1: {
-          name: document.getElementById("p1-name").value,
+          name: document.getElementById("p1-name").value.trim(),
           isHuman: true
         },
         player2: {
-          name: document.getElementById("p2-name").value,
+          name: document.getElementById("p2-name").value.trim(),
           isHuman: document.querySelector('input[name="p2-type"]:checked').value === "human"
         }
       };

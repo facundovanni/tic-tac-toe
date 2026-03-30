@@ -1,18 +1,23 @@
 export class Player {
-  
+  #name;
+  #isHuman;
+  #symbol;
+
   constructor(name, symbol, isHuman = true) {
-    this.name = name;
-    this.symbol = symbol;
-    this.isHuman = isHuman;
-    this.wins = 0;
+    this.#name = name;
+    this.#isHuman = isHuman;
+    this.#symbol = symbol;
   }
 
-  async getMove(availableMoves) {
-    if (this.isHuman) {
-      return null;
-    }
-    
-    const randomIndex = Math.floor(Math.random() * availableMoves.length);
-    return availableMoves[randomIndex];
+  get name() {
+    return this.#name;
+  }
+
+  get isHuman() {
+    return this.#isHuman;
+  }
+
+  get symbol() {
+    return this.#symbol;
   }
 }
