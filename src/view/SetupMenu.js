@@ -38,7 +38,7 @@ export class SetupMenu {
               <input type="radio" name="p2-type" value="human" class="hidden"> Humano
             </label>
             <label class="flex items-center justify-center py-2 rounded-lg cursor-pointer has-[:checked]:bg-surface has-[:checked]:text-secondary text-text-muted text-xs font-bold transition-all">
-              <input type="radio" name="p2-type" value="bot" checked class="hidden"> Bot (IA)
+              <input type="radio" name="p2-type" value="bot" checked class="hidden"> Bot (Computer)
             </label>
           </div>
         </div>
