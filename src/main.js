@@ -35,7 +35,7 @@ class TicTacToeGame {
       new Player(config.player1.name, "X", true),
       new Player(config.player2.name, "O", config.player2.isHuman)
     ];
-    this.#currentPlayerIndex = 0;
+    this.#currentPlayerIndex = Math.floor(Math.random() * 2);
     this.#boardLogic = new GameBoard(this.#size);
     this.#renderGameBoard();
   }
@@ -43,9 +43,13 @@ class TicTacToeGame {
   #renderGameBoard() {
     this.#ui = new GameUI(this.#app);
 
+    const startingPlayer = this.#players[this.#currentPlayerIndex];
+    
     this.#ui.render(this.#size, this.#players, (row, col, element) => {
       this.#handleMove(row, col, element);
     });
+    
+    this.#ui.updateTurn(startingPlayer, true);
   }
 
   #handleMove(row, col, element) {

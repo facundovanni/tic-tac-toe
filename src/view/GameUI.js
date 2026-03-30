@@ -27,8 +27,6 @@ export class GameUI {
     this.#container.appendChild(header);
     this.#turnIndicator = document.getElementById("turn-indicator");
 
-    this.updateTurn(players[0]);
-
     this.#boardElement = document.createElement("div");
     this.#boardElement.id = "game-board";
     this.#boardElement.className = "grid gap-3 bg-slate-800/50 p-4 rounded-3xl shadow-2xl border border-slate-700/50 w-full max-w-md aspect-square mb-8";
@@ -41,12 +39,16 @@ export class GameUI {
     this.#generateCells(size, onCellClick);
   }
 
-  updateTurn(player) {
+  updateTurn(player, isFirstTurn =false) {
     if (!this.#turnIndicator) return;
 
     const colorClass = player.symbol === "X" ? "text-cyan-400" : "text-pink-500";
+    const badge = isFirstTurn 
+      ? `<span class="ml-2 px-2 py-0.5 bg-yellow-500/20 text-yellow-500 text-[10px] rounded border border-yellow-500/50 animate-pulse">¡EMPIEZA!</span>` 
+      : "";
+
     this.#turnIndicator.innerHTML = `
-      Esperando jugada de <span class="${colorClass} font-black">${player.name}</span>...
+      Esperando jugada de <span class="${colorClass} font-black">${player.name}</span>${badge}
     `;
   }
 
