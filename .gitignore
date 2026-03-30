@@ -1,22 +1,18 @@
-# Dependencias
 node_modules/
 dist/
 dist-ssr/
 *.local
 
-# Temporales de editores y SO
 .vscode/*
 !.vscode/extensions.json
 .idea/
 .DS_Store
 thumbs.db
 
-# Logs de error
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Temporales de herramientas (Vite, Parcel, etc.)
 .parcel-cache/
 .vite/

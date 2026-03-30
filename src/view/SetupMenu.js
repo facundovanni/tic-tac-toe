@@ -23,28 +23,28 @@ export class SetupMenu {
       
       <div class="space-y-6">
         <div class="group">
-          <label class="block text-[10px] font-black uppercase tracking-widest text-text-muted mb-2 group-focus-within:text-primary transition-colors">Jugador 1 (X)</label>
+          <label class="block text font-black uppercase tracking-widest text-text-muted mb-2 group-focus-within:text-primary transition-colors">Jugador 1 (X)</label>
           <input type="text" id="p1-name" name="p1-name" placeholder="Nombre Jugador 1" required
             class="w-full bg-background border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 text-text-main transition-all">
         </div>
         
         <div class="pt-2">
-          <label class="block text-[10px] font-black uppercase tracking-widest text-text-muted mb-2">Jugador 2 (O)</label>
+          <label class="block text font-black uppercase tracking-widest text-text-muted mb-2">Jugador 2 (O)</label>
           <input type="text" id="p2-name" name="p2-name" placeholder="Nombre Jugador 2" required
             class="w-full bg-background border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-secondary/50 text-text-main mb-4 transition-all">
           
           <div class="grid grid-cols-2 gap-2 bg-background/50 p-1 rounded-xl border border-white/5">
-            <label class="flex items-center justify-center py-2 rounded-lg cursor-pointer has-[:checked]:bg-surface has-[:checked]:text-primary text-text-muted text-xs font-bold transition-all">
+            <label class="flex items-center justify-center py-2 rounded-lg cursor-pointer has-checked:bg-surface has-checked:text-primary text-text-muted text-xs font-bold transition-all">
               <input type="radio" name="p2-type" value="human" class="hidden"> Humano
             </label>
-            <label class="flex items-center justify-center py-2 rounded-lg cursor-pointer has-[:checked]:bg-surface has-[:checked]:text-secondary text-text-muted text-xs font-bold transition-all">
+            <label class="flex items-center justify-center py-2 rounded-lg cursor-pointer has-checked:bg-surface has-checked:text-secondary text-text-muted text-xs font-bold transition-all">
               <input type="radio" name="p2-type" value="bot" checked class="hidden"> Bot (Computer)
             </label>
           </div>
         </div>
 
         <div class="space-y-4 pt-2">
-  <label class="text-[10px] font-black uppercase tracking-widest text-text-muted">Dimensión del Tablero</label>
+  <label class="text-[12px] font-black uppercase tracking-widest text-text-muted">Dimensión del Tablero</label>
   <div class="grid grid-cols-2 gap-3">
     <button type="button" data-size="3" class="size-btn py-3 rounded-xl bg-primary/10 border-2 border-primary text-primary font-black text-sm transition-all active:scale-95">
       Clásico (3x3)
