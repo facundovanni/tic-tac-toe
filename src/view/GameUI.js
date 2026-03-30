@@ -1,4 +1,4 @@
-import { gameStore } from "../store/GameStore";
+import { gameStore } from "../store/GameStore.js";
 
 export class GameUI {
   #container;

@@ -1,10 +1,10 @@
 import "./styles.css";
-import { Player } from "./models/Player";
-import { SetupMenu } from "./view/SetupMenu";
-import { GameUI } from "./view/GameUI";
-import { GameBoard } from "./models/GameBoard";
-import { GameController } from "./controllers/GameController";
-import { gameStore } from "./store/GameStore";
+import { Player } from "./models/Player.js";
+import { SetupMenu } from "./view/SetupMenu.js";
+import { GameUI } from "./view/GameUI.js";
+import { GameBoard } from "./models/GameBoard.js";
+import { GameController } from "./controllers/GameController.js";
+import { gameStore } from "./store/GameStore.js";
 
 const GAME_TITLE = "Tic Tac Toe";
 class TicTacToeGame {
