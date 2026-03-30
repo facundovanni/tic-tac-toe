@@ -1,4 +1,4 @@
-# Avature Tic Tac Toe
+# Tic Tac Toe
 
 ## Main Goal
 
