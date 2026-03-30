@@ -76,6 +76,15 @@ export class SetupMenu {
 
     card.addEventListener("submit", (e) => {
       e.preventDefault();
+      const name1 = document.getElementById("p1-name").value.trim();
+      const name2 = document.getElementById("p2-name").value.trim();
+
+      if (name1.toLowerCase() === name2.toLowerCase()) {
+        alert("Los jugadores deben tener nombres distintos.");
+        document.getElementById("p2-name").focus();
+        return;
+      }
+
       const isCustom = !document.getElementById('custom-size-container').classList.contains('hidden');
       const sizeValue = isCustom ? document.getElementById("board-size").value : 3;
 

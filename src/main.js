@@ -17,7 +17,7 @@ class TicTacToeGame {
   }
 
   init() {
-    gameStore.clearConfig();
+    gameStore.clearAll();
     const menu = new SetupMenu(this.#app, GAME_TITLE, (config) => {
       gameStore.saveConfig(config);
       this.#handleStart(config);
@@ -35,7 +35,7 @@ class TicTacToeGame {
 
     const startingIndex = Math.floor(Math.random() * 2);
     const boardLogic = new GameBoard(size);
-    const ui = new GameUI(this.#app);
+    const ui = new GameUI(this.#app, GAME_TITLE);
 
     const controller = new GameController(
       boardLogic,
@@ -46,7 +46,7 @@ class TicTacToeGame {
       () => this.#handleStart(config)
     );
 
-    ui.render(size, players, (r, c, el) => controller.handleMove(r, c, el));
+    ui.render(size, players, (r, c, el) => controller.handleMove(r, c, el), () => this.init());
 
     controller.start();
   }

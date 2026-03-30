@@ -11,7 +11,7 @@ export class GameUI {
     this.#title = title;
   }
 
-  render(size, players, onCellClick) {
+  render(size, players, onCellClick, onRestart) {
     this.#container.innerHTML = "";
     const scores = gameStore.getScores();
 
@@ -34,6 +34,18 @@ export class GameUI {
       </div>
       <div id="turn-indicator" aria-live="polite" class="mt-6 text-sm uppercase tracking-widest text-text-muted font-bold min-h-[24px]"></div>
     `;
+
+    const backBtn = this.#createButton(
+      "Abandonar Partida",
+      "text-[10px] bg-danger/10 hover:bg-danger/20 text-danger mt-4 border border-danger/20 max-w-[180px]",
+      () => {
+        if (window.confirm("¿Seguro que querés abandonar? Se perderá el progreso de esta ronda.")) {
+          onRestart();
+        }
+      }
+    );
+
+    header.appendChild(backBtn);
 
     this.#container.appendChild(header);
     this.#turnIndicator = document.getElementById("turn-indicator");
@@ -111,35 +123,38 @@ export class GameUI {
       </h2>
       <p class="text-text-muted mb-8 text-lg font-medium">${message}</p>
       
-      <div class="flex flex-col gap-3">
-        <button id="modal-replay-btn" 
-          class="w-full bg-primary hover:brightness-110 text-background font-black py-4 rounded-xl transition-all shadow-lg active:scale-95 uppercase tracking-widest">
-          Revancha
-        </button>
-        <button id="modal-menu-btn" 
-          class="w-full bg-background hover:bg-surface-hover text-text-muted font-bold py-3 rounded-xl transition-all active:scale-95 uppercase tracking-widest text-xs">
-          Volver al Menú
-        </button>
-      </div>
+      <div id="modal-actions" class="flex flex-col gap-3">
+        </div>
     `;
+
+    const menuReplay = this.#createButton(
+      "Revancha",
+      "w-full bg-primary hover:brightness-110 text-background font-black py-4 rounded-xl shadow-lg active:scale-95 uppercase tracking-widest",
+      () => { overlay.remove(); onReplay(); }
+    );
+    const menuBack = this.#createButton(
+      "Volver al Menú",
+      "w-full bg-background hover:bg-surface-hover text-text-muted font-bold py-3 rounded-xl transition-all active:scale-95 uppercase tracking-widest text-xs",
+      () => { overlay.remove(); onRestart(); }
+    );
 
     overlay.appendChild(modal);
     this.#container.appendChild(overlay);
-
-    document.getElementById("modal-replay-btn").onclick = () => {
-      overlay.remove();
-      onReplay();
-    };
-
-    document.getElementById("modal-menu-btn").onclick = () => {
-      overlay.remove();
-      onRestart();
-    };
+    modal.querySelector("#modal-actions").appendChild(menuReplay);
+    modal.querySelector("#modal-actions").appendChild(menuBack);
   }
 
   setBoardLock(locked) {
     if (!this.#boardElement) return;
     this.#boardElement.classList.toggle("pointer-events-none", locked);
     this.#boardElement.classList.toggle("opacity-60", locked);
+  }
+
+  #createButton(text, extraClasses = "", onClick) {
+    const btn = document.createElement("button");
+    btn.className = `w-full font-bold py-3 rounded-xl transition-all active:scale-95 uppercase tracking-widest ${extraClasses}`;
+    btn.innerText = text;
+    if (onClick) btn.onclick = onClick;
+    return btn;
   }
 }

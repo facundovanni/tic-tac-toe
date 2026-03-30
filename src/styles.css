@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  /* Definimos nuestra paleta semántica */
   --color-primary: #22d3ee;    /* cyan-400 */
   --color-secondary: #f472b6;  /* pink-400 */
   --color-accent: #3b82f6;     /* blue-500 */
@@ -12,6 +11,8 @@
   
   --color-text-main: #ffffff;
   --color-text-muted: #94a6b8; /* slate-400 */
+  --color-danger: #ef4444; /* red-500 */
+  --color-danger-hover: #dc2626; /* red-600 */
 
   /* También podés definir fuentes o animaciones personalizadas aquí */
   --font-display: "Inter", sans-serif;
