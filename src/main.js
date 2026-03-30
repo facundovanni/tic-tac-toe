@@ -6,21 +6,19 @@ import { GameBoard } from "./models/GameBoard";
 import { GameController } from "./controllers/GameController";
 import { gameStore } from "./store/GameStore";
 
+const GAME_TITLE = "Tic Tac Toe";
 class TicTacToeGame {
-  #size;
   #app;
 
-  constructor(size = 3) {
-    this.#size = size;
+  constructor() {
     this.#app = document.querySelector("#app");
-    this.#app.className = "min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-8";
-
+    this.#app.className = "min-h-screen bg-background text-text-main flex flex-col items-center justify-center p-4 sm:p-8 transition-colors duration-500";
     this.init();
   }
 
   init() {
     gameStore.clearConfig();
-    const menu = new SetupMenu(this.#app, (config) => {
+    const menu = new SetupMenu(this.#app, GAME_TITLE, (config) => {
       gameStore.saveConfig(config);
       this.#handleStart(config);
     });
@@ -28,13 +26,15 @@ class TicTacToeGame {
   }
 
   #handleStart(config) {
+    const size = config.size || 3;
+
     const players = [
       new Player(config.player1.name, "X", true),
       new Player(config.player2.name, "O", config.player2.isHuman)
     ];
 
     const startingIndex = Math.floor(Math.random() * 2);
-    const boardLogic = new GameBoard(this.#size);
+    const boardLogic = new GameBoard(size);
     const ui = new GameUI(this.#app);
 
     const controller = new GameController(
@@ -46,11 +46,11 @@ class TicTacToeGame {
       () => this.#handleStart(config)
     );
 
-    ui.render(this.#size, players, (r, c, el) => controller.handleMove(r, c, el));
+    ui.render(size, players, (r, c, el) => controller.handleMove(r, c, el));
 
     controller.start();
   }
 
 }
 
-new TicTacToeGame(3);
+new TicTacToeGame();
