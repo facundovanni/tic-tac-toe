@@ -18,25 +18,35 @@ export class GameBoard {
     return true;
   }
 
-  checkWin(row, col, symbol) {
-    const n = this.#size;
-    const minMoves = (2 * n) - 1;
-    
-    if (this.#moveCount < minMoves) return false;
+  getGameState(row, col, symbol) {
+    const isWin = this.#checkWin(row, col, symbol);
+    if (isWin) return { isGameOver: true, winner: symbol, isDraw: false };
 
-    // 1. Fila
-    if (this.#grid[row].every(cell => cell === symbol)) return true;
-    // 2. Columna
-    if (this.#grid.every(r => r[col] === symbol)) return true;
-    // 3. Diagonal Principal
-    if (row === col && this.#grid.every((r, i) => r[i] === symbol)) return true;
-    // 4. Diagonal Inversa
-    if (row + col === n - 1 && this.#grid.every((r, i) => r[n - 1 - i] === symbol)) return true;
+    const isDraw = this.#moveCount === (this.#size * this.#size);
+    if (isDraw) return { isGameOver: true, winner: null, isDraw: true };
 
-    return false;
+    return { isGameOver: false, winner: null, isDraw: false };
   }
 
-  isDraw() {
-    return this.#moveCount === (this.#size * this.#size);
+  #checkWin(row, col, symbol) {
+    const n = this.#size;
+    if (this.#moveCount < (2 * n - 1)) return false;
+
+    return (
+      this.#grid[row].every(cell => cell === symbol) ||
+      this.#grid.every(r => r[col] === symbol) ||
+      (row === col && this.#grid.every((r, i) => r[i] === symbol)) ||
+      (row + col === n - 1 && this.#grid.every((r, i) => r[n - 1 - i] === symbol))
+    );
+  }
+
+  getAvailableMoves() {
+    const moves = [];
+    this.#grid.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        if (cell === null) moves.push({ row: rowIndex, col: colIndex });
+      });
+    });
+    return moves;
   }
 }

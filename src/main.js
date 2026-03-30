@@ -41,7 +41,8 @@ class TicTacToeGame {
     );
 
     ui.render(this.#size, players, (r, c, el) => controller.handleMove(r, c, el));
-    ui.updateTurn(players[startingIndex], true);
+    
+    controller.start();
   }
 
 }

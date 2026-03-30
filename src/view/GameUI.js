@@ -39,16 +39,19 @@ export class GameUI {
     this.#generateCells(size, onCellClick);
   }
 
-  updateTurn(player, isFirstTurn =false) {
+  updateTurn(player, isFirstTurn = false) {
     if (!this.#turnIndicator) return;
 
     const colorClass = player.symbol === "X" ? "text-cyan-400" : "text-pink-500";
-    const badge = isFirstTurn 
-      ? `<span class="ml-2 px-2 py-0.5 bg-yellow-500/20 text-yellow-500 text-[10px] rounded border border-yellow-500/50 animate-pulse">¡EMPIEZA!</span>` 
+    const badge = isFirstTurn
+      ? `<span class="ml-2 px-2 py-0.5 bg-yellow-500/20 text-yellow-500 text-[10px] rounded border border-yellow-500/50 animate-pulse">¡EMPIEZA!</span>`
       : "";
 
+    const thinkingIA = !player.isHuman
+      ? `<span class="ml-2 px-2 py-0.5 bg-yellow-500/20 text-yellow-500 text-[10px] rounded border border-yellow-500/50 animate-pulse">PENSANDO...</span>`
+      : "";
     this.#turnIndicator.innerHTML = `
-      Esperando jugada de <span class="${colorClass} font-black">${player.name}</span>${badge}
+      Esperando jugada de <span class="${colorClass} font-black">${player.name}</span>${badge} ${thinkingIA}
     `;
   }
 
@@ -112,5 +115,17 @@ export class GameUI {
       overlay.remove();
       onRestart();
     };
+  }
+
+  setBoardLock(locked) {
+    if (!this.#boardElement) return;
+
+    if (locked) {
+      this.#boardElement.classList.add("pointer-events-none", "opacity-80");
+      this.#boardElement.style.cursor = "wait";
+    } else {
+      this.#boardElement.classList.remove("pointer-events-none", "opacity-80");
+      this.#boardElement.style.cursor = "default";
+    }
   }
 }

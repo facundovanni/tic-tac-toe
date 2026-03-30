@@ -4,49 +4,85 @@ export class GameController {
   #players;
   #currentPlayerIndex;
   #isGameOver;
+  #isInputLocked;
   #onGameEnd;
 
-  constructor(boardLogic, ui, players, startingIndex, onGameEnd) {
+  constructor(boardLogic, ui, players, startingIndex, onRestart) {
     this.#boardLogic = boardLogic;
     this.#ui = ui;
     this.#players = players;
     this.#currentPlayerIndex = startingIndex;
-    this.#onGameEnd = onGameEnd;
+    this.#onGameEnd = onRestart;
     this.#isGameOver = false;
+    this.#isInputLocked = false;
+    this.#isInputLocked = false;
   }
 
   handleMove(row, col, element) {
-    if (this.#isGameOver) return;
+    if (this.#isGameOver || this.#isInputLocked) return;
 
-    const currentPlayer = this.#players[this.#currentPlayerIndex];
+    const player = this.#players[this.#currentPlayerIndex];
+    if (!this.#boardLogic.setMove(row, col, player.symbol)) return;
 
-    if (!this.#boardLogic.setMove(row, col, currentPlayer.symbol)) return;
+    this.#ui.updateCell(element, player.symbol);
 
-    this.#ui.updateCell(element, currentPlayer.symbol);
+    const { isGameOver, winner } = this.#boardLogic.getGameState(row, col, player.symbol);
 
-    if (this.#checkGameState(row, col, currentPlayer)) return;
+    if (isGameOver) {
+      this.#finishGame(winner ? `¡${player.name} ha vencido!` : "Empate técnico.", !!winner);
+      return;
+    }
 
     this.#nextTurn();
   }
+  
+  #finishGame(message, isWin) {
+    this.#isGameOver = true;
+    this.#isInputLocked = true;
+    this.#ui.setBoardLock(true);
 
-  #checkGameState(row, col, player) {
-    if (this.#boardLogic.checkWin(row, col, player.symbol)) {
-      this.#isGameOver = true;
-      this.#ui.showResult(true, `¡${player.name} ha vencido!`, this.#onGameEnd);
-      return true;
-    }
-
-    if (this.#boardLogic.isDraw()) {
-      this.#isGameOver = true;
-      this.#ui.showResult(false, "No hay más movimientos posibles.", this.#onGameEnd);
-      return true;
-    }
-    return false;
+    setTimeout(() => {
+      this.#ui.showResult(isWin, message, this.#onGameEnd);
+    }, 600);
   }
 
   #nextTurn() {
-    this.#currentPlayerIndex = this.#currentPlayerIndex === 0 ? 1 : 0;
+    this.#currentPlayerIndex = (this.#currentPlayerIndex + 1) % 2;
     const nextPlayer = this.#players[this.#currentPlayerIndex];
     this.#ui.updateTurn(nextPlayer);
+
+    if (!nextPlayer.isHuman && !this.#isGameOver) {
+      this.#isInputLocked = true;
+      this.#ui.setBoardLock(true);
+      this.#handleAIMove();
+    } else {
+      this.#isInputLocked = false;
+      this.#ui.setBoardLock(false);
+    }
+  }
+
+  #handleAIMove() {
+    const availableMoves = this.#boardLogic.getAvailableMoves();
+    if (availableMoves.length === 0) return;
+
+    const { row, col } = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+
+    setTimeout(() => {
+      if (this.#isGameOver) return;
+
+      const cellElement = document.querySelector(`button[data-row="${row}"][data-col="${col}"]`);
+
+      this.#isInputLocked = false;
+      this.handleMove(row, col, cellElement);
+    }, 800);
+  }
+
+  start() {
+    const startingPlayer = this.#players[this.#currentPlayerIndex];
+    this.#ui.updateTurn(startingPlayer, true);
+
+    if (!startingPlayer.isHuman) {
+      this.#handleAIMove();
+    }
   }
 }
