@@ -1,3 +1,5 @@
+import { gameStore } from "../store/GameStore";
+
 export class GameController {
   #boardLogic;
   #ui;
@@ -6,13 +8,15 @@ export class GameController {
   #isGameOver;
   #isInputLocked;
   #onGameEnd;
+  #onReplay;
 
-  constructor(boardLogic, ui, players, startingIndex, onRestart) {
+  constructor(boardLogic, ui, players, startingIndex, onRestart, onReplay) {
     this.#boardLogic = boardLogic;
     this.#ui = ui;
     this.#players = players;
     this.#currentPlayerIndex = startingIndex;
     this.#onGameEnd = onRestart;
+    this.#onReplay = onReplay;
     this.#isGameOver = false;
     this.#isInputLocked = false;
     this.#isInputLocked = false;
@@ -29,20 +33,24 @@ export class GameController {
     const { isGameOver, winner } = this.#boardLogic.getGameState(row, col, player.symbol);
 
     if (isGameOver) {
-      this.#finishGame(winner ? `¡${player.name} ha vencido!` : "Empate técnico.", !!winner);
+      this.#finishGame(winner ? `¡${player.name} ha vencido!` : "Empate técnico.", !!winner, player.symbol);
       return;
     }
 
     this.#nextTurn();
   }
-  
-  #finishGame(message, isWin) {
+
+  #finishGame(message, isWin, winnerSymbol) {
     this.#isGameOver = true;
     this.#isInputLocked = true;
     this.#ui.setBoardLock(true);
 
+    if (isWin && winnerSymbol) {
+      gameStore.saveWinner(winnerSymbol);
+    }
+
     setTimeout(() => {
-      this.#ui.showResult(isWin, message, this.#onGameEnd);
+      this.#ui.showResult(isWin, message, this.#onGameEnd, this.#onReplay);
     }, 600);
   }
 

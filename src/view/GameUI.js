@@ -1,3 +1,5 @@
+import { gameStore } from "../store/GameStore";
+
 export class GameUI {
   #container;
   #boardElement;
@@ -9,6 +11,7 @@ export class GameUI {
 
   render(size, players, onCellClick) {
     this.#container.innerHTML = "";
+    const scores = gameStore.getScores();
 
     const header = document.createElement("div");
     header.className = "text-center mb-10 animate-fade-in";
@@ -17,9 +20,15 @@ export class GameUI {
         Tic Tac Toe
       </h2>
       <div class="flex items-center justify-center gap-4 text-slate-400 font-medium">
-        <span class="px-3 py-1 bg-slate-800 rounded-md border border-slate-700 text-cyan-400">${players[0].name} (X)</span>
-        <span class="text-slate-600 font-black">VS</span>
-        <span class="px-3 py-1 bg-slate-800 rounded-md border border-slate-700 text-pink-500">${players[1].name} (O)</span>
+        <div class="flex flex-col items-center">
+            <span class="px-3 py-1 bg-slate-800 rounded-md border border-slate-700 text-cyan-400">${players[0].name} (X)</span>
+            <span class="text-xs mt-1 font-bold text-cyan-600">${scores.x} Victorias</span>
+        </div>
+        <span class="text-slate-600 font-black text-xl">VS</span>
+        <div class="flex flex-col items-center">
+            <span class="px-3 py-1 bg-slate-800 rounded-md border border-slate-700 text-pink-500">${players[1].name} (O)</span>
+            <span class="text-xs mt-1 font-bold text-pink-600">${scores.o} Victorias</span>
+        </div>
       </div>
       <div id="turn-indicator" aria-live="polite" class="mt-6 text-sm uppercase tracking-widest text-slate-500 font-bold"></div>
     `;
@@ -89,7 +98,7 @@ export class GameUI {
   }
 
 
-  showResult(isWin, message, onRestart) {
+  showResult(isWin, message, onRestart, onReplay) {
     const overlay = document.createElement("div");
     overlay.className = "fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-300";
 
@@ -102,16 +111,28 @@ export class GameUI {
       ${isWin ? '¡Victoria!' : '¡Empate!'}
     </h2>
     <p class="text-slate-400 mb-8 text-lg font-medium">${message}</p>
-    <button id="modal-reset-btn" 
-      class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg active:scale-95 uppercase tracking-widest">
-      Nueva Partida
-    </button>
+    
+    <div class="flex flex-col gap-3">
+      <button id="modal-replay-btn" 
+        class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg active:scale-95 uppercase tracking-widest">
+        Revancha
+      </button>
+      <button id="modal-menu-btn" 
+        class="w-full bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-3 rounded-xl transition-all active:scale-95 uppercase tracking-widest text-sm">
+        Volver al Menú
+      </button>
+    </div>
   `;
 
     overlay.appendChild(modal);
     this.#container.appendChild(overlay);
 
-    document.getElementById("modal-reset-btn").onclick = () => {
+    document.getElementById("modal-replay-btn").onclick = () => {
+      overlay.remove();
+      onReplay();
+    };
+
+    document.getElementById("modal-menu-btn").onclick = () => {
       overlay.remove();
       onRestart();
     };
